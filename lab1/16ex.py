@@ -1,0 +1,6 @@
+itisname = "Danelle"
+it_is_name = "Danelle"
+_it_is_name = "Danelle"
+itIsName = "Danelle"
+ITISNAME = "Danelle"
+itISname = "Danelle"
