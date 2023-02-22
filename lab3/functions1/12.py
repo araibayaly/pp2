@@ -4,4 +4,4 @@ def histogram(l):
     s= n*2*"*"
     print(s)
 
-histogram([8,3,9])
+histogram([8,3,9]) 

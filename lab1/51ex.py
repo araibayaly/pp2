@@ -1,2 +1,2 @@
-b = "Hello, World!"
+b = "Life is good!"
 print(b[:3])
