@@ -1,88 +1,128 @@
-import pygame
+import pygame as pg
+import datetime
+pg.init()
+sc = pg.display.set_mode((1200, 700))
+pg.display.set_caption("paint")
+clock = pg.time.Clock()
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    clock = pygame.time.Clock()
-    
-    radius = 15
-    x = 0
-    y = 0
-    mode = 'blue'
-    points = []
-    
-    while True:
-        
-        pressed = pygame.key.get_pressed()
-        
-        alt_held = pressed[pygame.K_LALT] or pressed[pygame.K_RALT]
-        ctrl_held = pressed[pygame.K_LCTRL] or pressed[pygame.K_RCTRL]
-        
-        for event in pygame.event.get():
-            
-            # determin if X was clicked, or Ctrl+W or Alt+F4 was used
-            if event.type == pygame.QUIT:
-                return
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w and ctrl_held:
-                    return
-                if event.key == pygame.K_F4 and alt_held:
-                    return
-                if event.key == pygame.K_ESCAPE:
-                    return
-            
-                # determine if a letter key was pressed
-                if event.key == pygame.K_r:
-                    mode = 'red'
-                elif event.key == pygame.K_g:
-                    mode = 'green'
-                elif event.key == pygame.K_b:
-                    mode = 'blue'
-            
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1: # left click grows radius
-                    radius = min(200, radius + 1)
-                elif event.button == 3: # right click shrinks radius
-                    radius = max(1, radius - 1)
-            
-            if event.type == pygame.MOUSEMOTION:
-                # if mouse moved, add point to list
-                position = event.pos
-                points = points + [position]
-                points = points[-256:]
-                
-        screen.fill((0, 0, 0))
-        
-        # draw all points
-        i = 0
-        while i < len(points) - 1:
-            drawLineBetween(screen, i, points[i], points[i + 1], radius, mode)
-            i += 1
-        
-        pygame.display.flip()
-        
-        clock.tick(60)
+aqua = (0,255,255)
+red = (220,20,60)
+violet = (138,43,226)
+blue = (100,149,237)
+green = (193,255,193)
+brown = (255,125,64)
+yellow = (255,255,0)
+darkgreen = (3,168,158)
+navy = (0,0,128)
+black = (20, 20, 20)
+white = (255,255,255)
 
-def drawLineBetween(screen, index, start, end, width, color_mode):
-    c1 = max(0, min(255, 2 * index - 256))
-    c2 = max(0, min(255, 2 * index))
-    
-    if color_mode == 'blue':
-        color = (c1, c1, c2)
-    elif color_mode == 'red':
-        color = (c2, c1, c1)
-    elif color_mode == 'green':
-        color = (c1, c2, c1)
-    
-    dx = start[0] - end[0]
-    dy = start[1] - end[1]
-    iterations = max(abs(dx), abs(dy))
-    
-    for i in range(iterations):
-        progress = 1.0 * i / iterations
-        aprogress = 1 - progress
-        x = int(aprogress * start[0] + progress * end[0])
-        y = int(aprogress * start[1] + progress * end[1])
-        pygame.draw.circle(screen, color, (x, y), width)
 
-main()
+a = pg.Rect(0,10, 50, 50)
+r = pg.Rect(0,80, 50, 50)
+b = pg.Rect(0, 150, 50, 50)
+v = pg.Rect(0, 220, 50, 50)
+g = pg.Rect(0, 290, 50, 50)
+k = pg.Rect(0, 360, 50, 50)
+y = pg.Rect(0, 430, 50, 50)
+p = pg.Rect(0, 500, 50, 50)
+w = pg.Rect(0, 570, 50, 50)
+n = pg.Rect(0, 640, 50, 50)
+
+buttons = [[aqua,       a], 
+           [red,        r], 
+           [blue,       b], 
+           [violet,     v],
+           [green,   g],
+           [brown,    k],
+           [yellow,     y],
+           [darkgreen,   p],
+           [white,      w],
+           [navy,       n]]
+
+clr = (255,255,255)
+r = 50
+def changeclr():
+    global clr
+
+    px, py = pg.mouse.get_pos()
+    push = pg.mouse.get_pressed()
+
+    if push[0]:
+        if px < 50 and 10 < py < 60:
+            clr = aqua
+        if px < 130 and px < 50 and py > 80:
+            clr = red
+        if py < 200 and px < 50 and py > 150:
+            clr = blue
+        if py < 270 and px < 50 and py > 220:
+            clr = violet
+        if py < 340 and px < 50 and py > 290:
+            clr = green
+        if py < 410 and px < 50 and py > 360:
+            clr = brown
+        if py < 480 and px < 50 and py > 430:
+            clr = yellow
+        if py < 550 and px < 50 and py > 500:
+            clr = darkgreen
+        if py < 620 and px < 50 and py > 570:
+            clr = white
+        if py < 690 and px < 50 and py > 640:
+            clr = navy
+
+def painting(mode):
+    px, py = pg.mouse.get_pos()
+    push = pg.mouse.get_pressed()
+    
+    if push[0]:
+        if mode == "circle line":
+            pg.draw.circle(sc, clr, (px, py), 5)
+        elif mode == "square":
+            pg.draw.rect(sc, clr, pg.Rect((px-20), (py-20), 40, 40),20)
+        elif mode == "circle":
+            pg.draw.circle(sc, clr, (px, py), 25,25)
+        elif mode == "erase":
+             pg.draw.circle(sc, (0,0,0), (px, py), 40)
+        elif mode == "triangle":
+             pg.draw.polygon(sc, clr,[(px,py), (px - 15, py+15), (px + 15, py+15)])
+        elif mode == "perfect triangle":
+             pg.draw.polygon(sc, clr,[(px, py), (px - r * 3**0.5 / 2, py + r / 2), (px + r * 3**0.5 / 2, py + r / 2)])
+        elif mode == "rhombus":
+             pg.draw.polygon(sc, clr,[(px - r / 2, py), (px, py - r / 2), (px + r / 2, py), (px, py + r / 2)])
+
+def delete():                
+      key = pg.key.get_pressed()
+      if key[pg.K_d]: #delete
+          sc.fill((0, 0, 0))
+
+drawing = "circle line"
+
+while 1:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            quit()
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_c:
+                drawing = 'circle'
+            elif event.key == pg.K_s:
+                drawing = 'square'
+            elif event.key == pg.K_e:
+                drawing = 'erase'
+            elif event.key == pg.K_t:
+                drawing = 'perfect triangle'
+            elif event.key == pg.K_p:
+                drawing = 'triangle'
+            elif event.key == pg.K_r:
+                drawing = 'rhombus'
+            
+    for i in buttons:   #color  rect
+        pg.draw.rect(sc, i[0], i[1])
+    
+    painting(drawing)
+    changeclr()
+    delete()
+
+
+    clock.tick(900)
+    pg.display.update()

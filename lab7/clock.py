@@ -5,12 +5,12 @@ pygame.init()
 width, height = 800, 800 
 x = width//2 
 y = height//2 
-white = (255, 255, 255) 
+white = (255, 255 , 255) 
 sc = pygame.display.set_mode((width, height)) 
  
  
-mickey = pygame.image.load("lab7\images\main-clock.png") 
-leftHand = pygame.image.load("lab7\images\left-hand.png") 
+mickey = pygame.image.load("lab7/images/main-clock.png") 
+leftHand = pygame.image.load("lab7/images/left-hand.png") 
 rightHand = pygame.image.load("lab7/images/right-hand.png")
 mickeyRect = mickey.get_rect() 
  

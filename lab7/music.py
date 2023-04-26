@@ -6,7 +6,7 @@ width = 400
 height = 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Music-player')
-icon = pygame.image.load('lab7\images\music-player.png')
+icon = pygame.image.load('lab7/images/music-player.png')
 pygame.display.set_icon(icon)
 cover = pygame.image.load('lab7/images/cover.png')
 new_cover = pygame.transform.scale(cover, (400, 500))
